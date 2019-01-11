@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
@@ -16,12 +15,28 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-#
-from flask import Blueprint, redirect
 
-routes = Blueprint('routes', __name__)
+"""Add schedule interval to dag
+
+Revision ID: dd4ecb8fbee3
+Revises: c8ffec048a3b
+Create Date: 2018-12-27 18:39:25.748032
+
+"""
+
+from alembic import op
+import sqlalchemy as sa
+
+# revision identifiers, used by Alembic.
+revision = 'dd4ecb8fbee3'
+down_revision = 'c8ffec048a3b'
+branch_labels = None
+depends_on = None
 
 
-@routes.route('/')
-def index():
-    return redirect('/home')
+def upgrade():
+    op.add_column('dag', sa.Column('schedule_interval', sa.Text(), nullable=True))
+
+
+def downgrade():
+    op.drop_column('dag', sa.Column('schedule_interval', sa.Text(), nullable=True))

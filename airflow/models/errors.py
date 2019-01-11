@@ -16,12 +16,16 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
-#
-from flask import Blueprint, redirect
 
-routes = Blueprint('routes', __name__)
+from sqlalchemy import Integer, Column, String, Text
+
+from airflow.models.base import Base
+from airflow.utils.sqlalchemy import UtcDateTime
 
 
-@routes.route('/')
-def index():
-    return redirect('/home')
+class ImportError(Base):
+    __tablename__ = "import_error"
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(UtcDateTime)
+    filename = Column(String(1024))
+    stacktrace = Column(Text)
