@@ -81,9 +81,8 @@ class TriggerDagTests(unittest.TestCase):
             run_id=None,
             conf=None,
             execution_date=None,
-            replace_microseconds=True,
-        )
-        self.assertEqual(2,dag_run_mock.find.call_count())
+            replace_microseconds=True)
+        self.assertEqual(2, dag_run_mock.find.call_count())
 
     @mock.patch('airflow.models.DAG')
     @mock.patch('airflow.models.DagRun')
