@@ -64,6 +64,27 @@ class TriggerDagTests(unittest.TestCase):
             replace_microseconds=True,
         )
 
+    @mock.patch('airflow.models.DagRun')
+    @mock.patch('airflow.models.DagBag')
+    def test_trigger_dag_dag_run_execution_time_already_exist(self, dag_bag_mock, dag_run_mock):
+        dag_id = "dag_run_exist"
+        dag = DAG(dag_id)
+        dag_bag_mock.dags = [dag_id]
+        dag_bag_mock.get_dag.return_value = dag
+        dag_run_mock.find.return_value = DagRun()
+        self.assertRaises(
+            AirflowException,
+            _trigger_dag,
+            dag_id,
+            dag_bag_mock,
+            dag_run_mock,
+            run_id=None,
+            conf=None,
+            execution_date=None,
+            replace_microseconds=True,
+        )
+        self.assertEqual(2,dag_run_mock.find.call_count())
+
     @mock.patch('airflow.models.DAG')
     @mock.patch('airflow.models.DagRun')
     @mock.patch('airflow.models.DagBag')
