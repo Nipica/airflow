@@ -79,9 +79,9 @@ class DagNotFound(AirflowNotFoundException):
     pass
 
 
-class ExecutionTimeAlreadyExists(AirflowBadRequest):
+class ExecutionDateAlreadyExists(AirflowBadRequest):
     """Raise when a a DagRun already exist for the same dag and
-       same execution time"""
+       same execution date"""
     pass
 
 
