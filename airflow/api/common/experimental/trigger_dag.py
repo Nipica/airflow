@@ -33,7 +33,7 @@ def _trigger_dag(
         conf,
         execution_date,
         replace_microseconds,
-        UniqueExecutionTime=True,
+        UniqueExecutionDate=True,
 ):
     if dag_id not in dag_bag.dags:
         raise DagNotFound("Dag id {} not found".format(dag_id))
