@@ -82,9 +82,11 @@ def trigger_dag(dag_id):
         response.status_code = err.status_code
         return response
     except SQLAlchemyError as err:
-        error_message = ('A DagRun for {} already exist at execution_date {}'.format(dag_id, execution_date))
+        error_message = {
+            'error': 'A DagRun for {} already exist at execution_date {}'.format(dag_id, execution_date),
+            'exception': "{}".format(err)}
         _log.info(error_message)
-        response = jsonify({'error': error_message})
+        response = jsonify(error_message)
         response.status_code = 400
         return response
 
