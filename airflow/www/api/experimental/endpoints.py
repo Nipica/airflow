@@ -19,7 +19,7 @@
 from flask import (
     g, Blueprint, jsonify, request, url_for
 )
-
+from sqlalchemy.exc import SQLAlchemyError
 import airflow.api
 from airflow.api.common.experimental import delete_dag as delete
 from airflow.api.common.experimental import pool as pool_api
@@ -80,6 +80,12 @@ def trigger_dag(dag_id):
         _log.error(err)
         response = jsonify(error="{}".format(err))
         response.status_code = err.status_code
+        return response
+    except SQLAlchemyError as err:
+        error_message = ('A DagRun for {} already exist at execution_date {}'.format(dag_id, execution_date))
+        _log.info(error_message)
+        response = jsonify({'error': error_message})
+        response.status_code = 400
         return response
 
     if getattr(g, 'user', None):
