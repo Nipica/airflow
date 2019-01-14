@@ -21,9 +21,10 @@ import mock
 import unittest
 import json
 
-from airflow.exceptions import AirflowException
+from airflow.exceptions import AirflowException, ExecutionDateAlreadyExists
 from airflow.models import DAG, DagRun
 from airflow.api.common.experimental.trigger_dag import _trigger_dag
+from airflow.utils.timezone import utcnow
 
 
 class TriggerDagTests(unittest.TestCase):
@@ -67,13 +68,13 @@ class TriggerDagTests(unittest.TestCase):
     @mock.patch('airflow.models.DagRun')
     @mock.patch('airflow.models.DagBag')
     def test_trigger_dag_dag_run_execution_time_already_exist(self, dag_bag_mock, dag_run_mock):
-        dag_id = "dag_run_exist"
+        dag_id = "dag_run"
         dag = DAG(dag_id)
         dag_bag_mock.dags = [dag_id]
         dag_bag_mock.get_dag.return_value = dag
-        dag_run_mock.find.return_value = DagRun()
+        dag_run_mock.find.side_effect = [None,True]
         self.assertRaises(
-            AirflowException,
+            ExecutionDateAlreadyExists,
             _trigger_dag,
             dag_id,
             dag_bag_mock,
