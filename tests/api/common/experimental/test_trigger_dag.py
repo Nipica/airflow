@@ -72,7 +72,7 @@ class TriggerDagTests(unittest.TestCase):
         dag = DAG(dag_id)
         dag_bag_mock.dags = [dag_id]
         dag_bag_mock.get_dag.return_value = dag
-        dag_run_mock.find.side_effect = [None,True]
+        dag_run_mock.find.side_effect = [None, True]
         self.assertRaises(
             ExecutionDateAlreadyExists,
             _trigger_dag,
