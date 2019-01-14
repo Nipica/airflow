@@ -24,7 +24,6 @@ import json
 from airflow.exceptions import AirflowException, ExecutionDateAlreadyExists
 from airflow.models import DAG, DagRun
 from airflow.api.common.experimental.trigger_dag import _trigger_dag
-from airflow.utils.timezone import utcnow
 
 
 class TriggerDagTests(unittest.TestCase):
